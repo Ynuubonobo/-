@@ -2,14 +2,11 @@ from pydub import AudioSegment
 import os
 import pandas as pd
 
+#dataframe for information
 df = pd.read_excel("D:\Testaudio\Jogplan.xlsx")
-
 df = pd.DataFrame(df)
-
 dict = df.set_index("Key").to_dict()
-
 search_week = int(input("Week number->"))
-
 listkeys = [K for K, v in dict["Week"].items() if v == search_week ]
 
 
@@ -30,6 +27,7 @@ countdown =countdown[10000:21000]
 bellsound = bellsound[106000:107500]
 bellsound = bellsound.apply_gain(+20.5)
 
+#loop for every key associated with the week
 for k in listkeys :
     y= 0
     var=0
@@ -69,6 +67,7 @@ for k in listkeys :
     # End the Warmup
     mix = mix.overlay(countdown, position= time-10000, gain_during_overlay=-10)
     mix = mix.overlay(complete, position=(cw + rt)*60000 , gain_during_overlay=-10)
+    
     #loop all the audio bite for the running sequence
     while time < (cw + rt)*60000 :
         print(1)
@@ -107,8 +106,8 @@ for k in listkeys :
             var = 0
             print("Loop lel")
             print(3)
-
-
+            
+    #export format mp3 based on the day
     file_handle = mix.export("D:/Testaudio/"+name+"_Jog"+day+".mp3", format="mp3")
     print(name+"_Jog"+day)
     mix = AudioSegment.empty()
